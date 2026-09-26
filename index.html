@@ -3,172 +3,111 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ResearchLab — Research Analysis Suite</title>
+<title>ResearchLab | Research Analysis Made Simple</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#667085;--line:#dfe5ee;--accent:#2563eb}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Inter,Arial,sans-serif}
-header{background:#172033;color:#fff;padding:28px 6vw}header h1{margin:0 0 5px;font-size:29px}header p{margin:0;color:#c8d1df}
-main{max-width:1180px;margin:24px auto;padding:0 18px}.card{background:var(--card);border:1px solid #e8ebf1;border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 5px 20px #1720330b}
-h2{margin:0 0 14px;font-size:19px}.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
-.stat{background:#f5f7fb;border-radius:11px;padding:14px}.stat b{display:block;font-size:22px;margin-top:5px}
-input,select{width:100%;padding:10px;border:1px solid #cfd6e1;border-radius:8px;background:white}
-button{border:0;border-radius:8px;padding:10px 14px;background:var(--accent);color:white;font-weight:600;cursor:pointer}button.secondary{background:#e9eef6;color:#172033}
-.upload{border:2px dashed #bcc6d5;text-align:center;padding:34px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.toolbar>div{min-width:190px;flex:1}
+:root{--nav:#101a30;--accent:#2563eb;--accent2:#0ea5e9;--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#667085;--line:#e1e7ef}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px Inter,Arial,sans-serif}
+nav{height:64px;background:var(--nav);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;position:sticky;top:0;z-index:5}
+.brand{font-size:20px;font-weight:800}.brand span{color:#60a5fa}.navlinks{display:flex;gap:22px;align-items:center}.navlinks a{color:#d9e2f0;text-decoration:none}.navlinks a:hover{color:white}
+.btn{display:inline-block;border:0;border-radius:9px;padding:12px 18px;background:var(--accent);color:white;font-weight:700;cursor:pointer;text-decoration:none}.btn.light{background:white;color:var(--nav)}.btn.ghost{background:#e9eff9;color:var(--ink)}
+.hero{background:linear-gradient(135deg,#101a30 0%,#1c3560 65%,#0b789d 100%);color:white;padding:76px 6vw 88px}.hero-inner{max-width:1050px;margin:auto}.hero h1{font-size:48px;line-height:1.08;max-width:720px;margin:0 0 18px}.hero p{font-size:19px;line-height:1.6;color:#dbe7f5;max-width:680px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.hero small{display:block;margin-top:18px;color:#b9c9dc}
+main{max-width:1120px;margin:auto;padding:0 20px}.section{padding:58px 0}.section h2{text-align:center;font-size:30px;margin:0 0 10px}.section>p{text-align:center;color:var(--muted);max-width:700px;margin:0 auto 30px}.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}.feature,.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 5px 22px #1720330b}.icon{font-size:28px}.feature h3{margin:12px 0 8px}.feature p{color:var(--muted);line-height:1.55;margin:0}
+#analyzer{scroll-margin-top:80px}.workspace{display:none}.upload{border:2px dashed #b8c5d6;text-align:center;padding:36px;background:white;border-radius:16px}.upload input{width:100%;max-width:650px;padding:12px;border:1px solid #ccd5e2;border-radius:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.stat{background:#f4f7fb;border-radius:11px;padding:14px}.stat b{display:block;font-size:22px;margin-top:5px}
+label{display:block;font-weight:600;margin-bottom:6px}select{width:100%;padding:10px;border:1px solid #cfd7e3;border-radius:8px;background:white}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.toolbar>div{min-width:190px;flex:1}
 table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}th{background:#f7f9fc}
-canvas{max-height:380px}.result{background:#f7f9fc;border-radius:10px;padding:14px;margin-top:12px;line-height:1.7}.error{color:#b42318}.success{color:#027a48}
-.premium{background:#fffaf0;border-color:#ead9a5}.hidden{display:none}.pill{display:inline-block;background:#e8efff;color:#174ea6;padding:4px 8px;border-radius:99px;font-size:12px}
+canvas{max-height:390px}.result{background:#f7f9fc;border-radius:10px;padding:14px;margin-top:12px;line-height:1.7}.muted{color:var(--muted);font-size:13px}.error{color:#b42318}.success{color:#027a48}
+.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}.price{background:white;border:1px solid var(--line);border-radius:16px;padding:24px}.price.pro{border:2px solid var(--accent)}.price h3{margin-top:0}.money{font-size:32px;font-weight:800}.price li{margin:10px 0;color:#475467}
+footer{background:var(--nav);color:#b8c5d6;text-align:center;padding:28px;margin-top:20px}.hidden{display:none!important}
+@media(max-width:700px){.navlinks a:not(:last-child){display:none}.hero h1{font-size:37px}}
 </style>
 </head>
 <body>
-<header><h1>ResearchLab</h1><p>Practical statistics and publication-ready analysis for researchers.</p></header>
+<nav>
+<div class="brand">Research<span>Lab</span></div>
+<div class="navlinks"><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#analyzer" class="btn">Start analysis</a></div>
+</nav>
+
+<section class="hero">
+<div class="hero-inner">
+<div class="muted" style="color:#9fc4ff">FOR STUDENTS • RESEARCHERS • LABS</div>
+<h1>Research analysis made simple.</h1>
+<p>Upload your research dataset and turn it into clear statistics, charts and analysis without complicated software.</p>
+<div class="hero-actions"><a class="btn light" href="#analyzer">Start free analysis</a><a class="btn" style="background:#ffffff22;border:1px solid #ffffff55" href="#features">Explore features</a></div>
+<small>🔒 Prototype processing happens locally in your browser.</small>
+</div>
+</section>
+
 <main>
-<section class="card upload" id="upload">
-<h2>Start an analysis</h2>
-<p class="muted">Upload CSV or Excel (.xlsx/.xls). Data stays in your browser in this prototype.</p>
+<section class="section" id="features">
+<h2>Everything researchers need</h2>
+<p>ResearchLab is being built as a practical analysis workspace for everyday research data.</p>
+<div class="features">
+<div class="feature"><div class="icon">📊</div><h3>Statistics</h3><p>Descriptive statistics and two-group comparisons with clear output.</p></div>
+<div class="feature"><div class="icon">📈</div><h3>ROC & AUC</h3><p>Explore biomarker performance and visualize ROC curves.</p></div>
+<div class="feature"><div class="icon">🔗</div><h3>Correlation</h3><p>Calculate Pearson correlations and quickly inspect relationships.</p></div>
+<div class="feature"><div class="icon">🧬</div><h3>Research-ready</h3><p>Designed around the workflows used by students and biomedical researchers.</p></div>
+<div class="feature"><div class="icon">📥</div><h3>Export</h3><p>Download statistics and figures for continued analysis.</p></div>
+<div class="feature"><div class="icon">🤖</div><h3>AI tools — coming</h3><p>Planned assistance for interpretation, figure legends and Results writing.</p></div>
+</div>
+</section>
+
+<section class="section" id="analyzer">
+<h2>Analysis workspace</h2>
+<p>Upload a CSV or Excel dataset to begin.</p>
+<div id="upload" class="upload">
 <input id="file" type="file" accept=".csv,.xlsx,.xls"><br><br>
-<button onclick="document.getElementById('file').click()">Choose dataset</button>
+<button class="btn" onclick="document.getElementById('file').click()">Choose dataset</button>
 <p id="msg" class="muted"></p>
-</section>
-
-<div id="workspace" class="hidden">
-<section class="card"><h2>Dataset overview</h2><div id="stats" class="grid"></div></section>
-
-<section class="card">
-<h2>Descriptive statistics</h2>
-<div style="overflow:auto"><table><thead><tr><th>Variable</th><th>N</th><th>Missing</th><th>Mean</th><th>SD</th><th>Median</th><th>Min</th><th>Max</th></tr></thead><tbody id="desc"></tbody></table></div>
-<br><button class="secondary" onclick="downloadCSV()">Download statistics CSV</button>
-</section>
-
-<section class="card">
-<h2>Visualization</h2>
-<div class="toolbar">
-<div><label>Variable</label><select id="plotVar"></select></div>
-<div><label>Plot</label><select id="plotType"><option value="hist">Histogram</option><option value="box">Box plot</option></select></div>
-<div><button onclick="drawPlot()">Update plot</button></div>
-<div><button class="secondary" onclick="downloadPlot()">Download PNG</button></div>
 </div>
-<br><canvas id="plot"></canvas>
-</section>
 
-<section class="card">
-<h2>Two-group comparison</h2>
-<p class="muted">Use this for an independent two-sample t-test. Select a numeric outcome and a grouping column containing exactly two groups.</p>
-<div class="grid">
-<div><label>Outcome</label><select id="ttY"></select></div>
-<div><label>Group</label><select id="ttG"></select></div>
-</div><br><button onclick="runTTest()">Run independent t-test</button>
-<div id="ttResult"></div>
-</section>
-
-<section class="card">
-<h2>Correlation</h2>
-<div class="grid"><div><label>Variable X</label><select id="corX"></select></div><div><label>Variable Y</label><select id="corY"></select></div></div><br>
-<button onclick="runCorrelation()">Run Pearson correlation</button><div id="corResult"></div>
-</section>
-
-<section class="card">
-<h2>ROC / AUC</h2>
-<p class="muted">Select a numeric biomarker and a binary condition column. The first distinct group is treated as negative and the second as positive.</p>
-<div class="grid"><div><label>Biomarker</label><select id="rocX"></select></div><div><label>Condition</label><select id="rocG"></select></div></div><br>
-<button onclick="runROC()">Calculate ROC/AUC</button><div id="rocResult"></div><canvas id="rocPlot" class="hidden"></canvas>
-</section>
-
-<section class="card premium">
-<h2><span class="pill">PRO</span> Advanced research tools</h2>
-<p>Planned paid features: ANOVA, non-parametric tests, publication-quality SVG/PDF figures, multiple ROC curves, confidence intervals, automated statistical reporting, and AI-assisted interpretation.</p>
-<button onclick="alert('Payments will be connected after the analysis engine is validated.')">Upgrade — $5/month</button>
-</section>
+<div id="workspace" class="workspace">
+<div class="card" style="margin-top:18px"><h2 style="text-align:left">Dataset overview</h2><div id="stats" class="grid"></div></div>
+<div class="card"><h2 style="text-align:left">Descriptive statistics</h2><div style="overflow:auto"><table><thead><tr><th>Variable</th><th>N</th><th>Missing</th><th>Mean</th><th>SD</th><th>Median</th><th>Min</th><th>Max</th></tr></thead><tbody id="desc"></tbody></table></div><br><button class="btn ghost" onclick="downloadCSV()">Download CSV</button></div>
+<div class="card"><h2 style="text-align:left">Visualization</h2><div class="toolbar"><div><label>Variable</label><select id="plotVar"></select></div><div><label>Plot</label><select id="plotType"><option value="hist">Histogram</option><option value="box">Distribution summary</option></select></div><div><button class="btn" onclick="drawPlot()">Update</button></div><div><button class="btn ghost" onclick="downloadPlot()">Download PNG</button></div></div><br><canvas id="plot"></canvas></div>
+<div class="card"><h2 style="text-align:left">Independent t-test</h2><p class="muted">Select a numeric outcome and a grouping column containing exactly two groups.</p><div class="grid"><div><label>Outcome</label><select id="ttY"></select></div><div><label>Group</label><select id="ttG"></select></div></div><br><button class="btn" onclick="runTTest()">Run t-test</button><div id="ttResult"></div></div>
+<div class="card"><h2 style="text-align:left">Pearson correlation</h2><div class="grid"><div><label>Variable X</label><select id="corX"></select></div><div><label>Variable Y</label><select id="corY"></select></div></div><br><button class="btn" onclick="runCorrelation()">Run correlation</button><div id="corResult"></div></div>
+<div class="card"><h2 style="text-align:left">ROC / AUC</h2><p class="muted">Select a numeric biomarker and a binary condition column. The second group is treated as positive.</p><div class="grid"><div><label>Biomarker</label><select id="rocX"></select></div><div><label>Condition</label><select id="rocG"></select></div></div><br><button class="btn" onclick="runROC()">Calculate ROC/AUC</button><div id="rocResult"></div><canvas id="rocPlot" class="hidden"></canvas></div>
 </div>
+</section>
+
+<section class="section" id="pricing">
+<h2>Simple pricing</h2><p>Start free. Upgrade when you need advanced research tools.</p>
+<div class="pricing">
+<div class="price"><h3>Free</h3><div class="money">$0</div><p class="muted">For trying ResearchLab</p><ul><li>Descriptive statistics</li><li>Basic charts</li><li>t-test</li><li>Correlation</li><li>ROC/AUC</li></ul><a href="#analyzer" class="btn ghost">Start free</a></div>
+<div class="price pro"><h3>ResearchLab PRO</h3><div class="money">$5<span style="font-size:14px">/month</span></div><p class="muted">Planned subscription</p><ul><li>Unlimited analyses</li><li>Advanced statistical tests</li><li>Publication-quality figures</li><li>High-resolution exports</li><li>Saved analysis history</li></ul><button class="btn" onclick="alert('PRO payments will be connected after the free product is validated.')">Coming soon</button></div>
+<div class="price"><h3>ResearchLab AI</h3><div class="money">$10<span style="font-size:14px">/month</span></div><p class="muted">Planned advanced tier</p><ul><li>AI result interpretation</li><li>Figure legends</li><li>Statistical reporting</li><li>Manuscript Results assistance</li><li>Advanced bioinformatics tools</li></ul><button class="btn ghost" onclick="alert('AI features are planned for a later release.')">Coming soon</button></div>
+</div>
+</section>
 </main>
+<footer>© 2026 ResearchLab • Built for researchers</footer>
 
 <script>
 let rows=[],headers=[],numeric=[],categorical=[],plotChart=null,rocChart=null,lastDesc=[];
-
 const $=id=>document.getElementById(id);
 function num(h){return rows.map(r=>Number(r[h])).filter(Number.isFinite)}
 function groups(h){return [...new Set(rows.map(r=>String(r[h]).trim()).filter(Boolean))]}
 function mean(a){return a.reduce((s,x)=>s+x,0)/a.length}
 function sd(a){let m=mean(a);return a.length>1?Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/(a.length-1)):0}
-function median(a){a=[...a].sort((x,y)=>x-y);let n=a.length;return n%2?a[(n-1)/2]:(a[n/2-1]+a[n/2])/2}
+function median(a){a=[...a].sort((x,y)=>x-y);let n=a.length;return n%2?a[(n-1)/2]:(a[n/2-1]+a[n/2])}
 function fmt(x){return Number.isFinite(x)?x.toFixed(4):'—'}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-
-function parseCSV(t){
- const lines=t.trim().split(/\r?\n/); if(!lines.length)return [];
- function line(s){let a=[],c='',q=false;for(let i=0;i<s.length;i++){let x=s[i];if(x=='"'&&s[i+1]=='"'){c+='"';i++;continue}if(x=='"'){q=!q;continue}if(x==','&&!q){a.push(c.trim());c=''}else c+=x}a.push(c.trim());return a}
- headers=line(lines[0]);return lines.slice(1).filter(Boolean).map(l=>{let v=line(l),o={};headers.forEach((h,i)=>o[h]=v[i]??'');return o})
-}
-function loadData(data){
- rows=data.filter(r=>Object.values(r).some(v=>String(v??'').trim()!=='');
- headers=Object.keys(rows[0]||{});
- numeric=headers.filter(h=>num(h).length>=2);
- categorical=headers.filter(h=>groups(h).length>=2);
- $('workspace').classList.remove('hidden'); render();
-}
-$('file').addEventListener('change',e=>{
- let f=e.target.files[0];if(!f)return;$('msg').textContent='Reading '+f.name+'…';
- let reader=new FileReader();
- if(/\.csv$/i.test(f.name)){reader.onload=()=>loadData(parseCSV(reader.result));reader.readAsText(f)}
- else{reader.onload=()=>{try{let wb=XLSX.read(reader.result,{type:'array'});let ws=wb.Sheets[wb.SheetNames[0]];loadData(XLSX.utils.sheet_to_json(ws,{defval:''}))}catch(e){$('msg').innerHTML='<span class="error">Could not read Excel file.</span>'}};reader.readAsArrayBuffer(f)}
-});
+function parseCSV(t){const lines=t.trim().split(/\r?\n/);if(!lines.length)return[];function line(s){let a=[],c='',q=false;for(let i=0;i<s.length;i++){let x=s[i];if(x=='"'&&s[i+1]=='"'){c+='"';i++;continue}if(x=='"'){q=!q;continue}if(x==','&&!q){a.push(c.trim());c=''}else c+=x}a.push(c.trim());return a}headers=line(lines[0]);return lines.slice(1).filter(Boolean).map(l=>{let v=line(l),o={};headers.forEach((h,i)=>o[h]=v[i]??'');return o})}
+function loadData(data){rows=data.filter(r=>Object.values(r).some(v=>String(v??'').trim()!==''));headers=Object.keys(rows[0]||{});numeric=headers.filter(h=>num(h).length>=2);categorical=headers.filter(h=>groups(h).length>=2);$('workspace').style.display='block';render();document.getElementById('workspace').scrollIntoView({behavior:'smooth'})}
+$('file').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;$('msg').textContent='Reading '+f.name+'…';let r=new FileReader();if(/\.csv$/i.test(f.name)){r.onload=()=>loadData(parseCSV(r.result));r.readAsText(f)}else{r.onload=()=>{try{let wb=XLSX.read(r.result,{type:'array'});loadData(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''}))}catch(e){$('msg').innerHTML='<span class=error>Could not read Excel file.</span>'}};r.readAsArrayBuffer(f)}})
 function fill(id,arr){$(id).innerHTML=arr.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}
-function render(){
- $('msg').innerHTML='<span class="success">Dataset loaded successfully.</span>';
- $('stats').innerHTML=`<div class=stat>Rows<b>${rows.length}</b></div><div class=stat>Columns<b>${headers.length}</b></div><div class=stat>Numeric variables<b>${numeric.length}</b></div><div class=stat>Missing cells<b>${rows.reduce((s,r)=>s+headers.filter(h=>String(r[h]??'').trim()==='').length,0)}</b></div>`;
- lastDesc=numeric.map(h=>{let a=num(h);return {Variable:h,N:a.length,Missing:rows.length-a.length,Mean:mean(a),SD:sd(a),Median:median(a),Min:Math.min(...a),Max:Math.max(...a)}})
- $('desc').innerHTML=lastDesc.map(x=>`<tr>${Object.values(x).map(v=>`<td>${typeof v==='number'?fmt(v):esc(v)}</td>`).join('')}</tr>`).join('');
- ['plotVar','ttY','corX','corY','rocX'].forEach(id=>fill(id,numeric));
- ['ttG','rocG'].forEach(id=>fill(id,categorical));
- drawPlot();
-}
-function drawPlot(){
- let h=$('plotVar').value,a=num(h),type=$('plotType').value;
- if(plotChart)plotChart.destroy();
- let labels=[],data=[];
- if(type==='hist'){
-  let min=Math.min(...a),max=Math.max(...a),bins=Math.min(15,Math.max(6,Math.ceil(Math.sqrt(a.length)))),w=(max-min||1)/bins,c=Array(bins).fill(0);
-  a.forEach(x=>c[Math.min(bins-1,Math.floor((x-min)/w))]++);
-  labels=c.map((_,i)=>(min+i*w).toFixed(2));data=c;
- }else{
-  let q=[Math.min(...a),...quantiles(a,[.25,.5,.75]),Math.max(...a)];
-  labels=['Min','Q1','Median','Q3','Max'];data=q;
- }
- plotChart=new Chart($('plot'),{type:'bar',data:{labels,datasets:[{label:h,data}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
-}
-function quantiles(a,ps){let s=[...a].sort((x,y)=>x-y);return ps.map(p=>{let i=(s.length-1)*p,l=Math.floor(i),u=Math.ceil(i);return l===u?s[l]:s[l]+(s[u]-s[l])*(i-l)})}
-function runTTest(){
- let y=$('ttY').value,g=$('ttG').value,gs=groups(g);if(gs.length!==2){$('ttResult').innerHTML='<div class=error>Grouping variable must contain exactly two groups.</div>';return}
- let a=rows.filter(r=>String(r[g]).trim()===gs[0]).map(r=>Number(r[y])).filter(Number.isFinite),b=rows.filter(r=>String(r[g]).trim()===gs[1]).map(r=>Number(r[y])).filter(Number.isFinite);
- let se=Math.sqrt(sd(a)**2/a.length+sd(b)**2/b.length),t=(mean(a)-mean(b))/se;
- let df=(sd(a)**2/a.length+sd(b)**2/b.length)**2/((sd(a)**2/a.length)**2/(a.length-1)+(sd(b)**2/b.length)**2/(b.length-1));
- let p=2*(1-jStat.studentt.cdf(Math.abs(t),df));
- $('ttResult').innerHTML=`<div class=result><b>${esc(gs[0])}</b>: n=${a.length}, mean=${fmt(mean(a))}, SD=${fmt(sd(a))}<br><b>${esc(gs[1])}</b>: n=${b.length}, mean=${fmt(mean(b))}, SD=${fmt(sd(b))}<br><b>t</b> = ${fmt(t)}, <b>df</b> = ${fmt(df)}, <b>p</b> = ${fmt(p)}</div>`;
-}
-function runCorrelation(){
- let x=num($('corX').value),y=[],xh=$('corX').value,yh=$('corY').value,pairs=[];
- rows.forEach(r=>{let a=Number(r[xh]),b=Number(r[yh]);if(Number.isFinite(a)&&Number.isFinite(b))pairs.push([a,b])});
- x=pairs.map(p=>p[0]);y=pairs.map(p=>p[1]);let mx=mean(x),my=mean(y),r=pairs.reduce((s,p)=>s+(p[0]-mx)*(p[1]-my),0)/Math.sqrt(pairs.reduce((s,p)=>s+(p[0]-mx)**2,0)*pairs.reduce((s,p)=>s+(p[1]-my)**2,0));
- let t=r*Math.sqrt((pairs.length-2)/(1-r*r)),p=2*(1-jStat.studentt.cdf(Math.abs(t),pairs.length-2));
- $('corResult').innerHTML=`<div class=result>n = ${pairs.length}<br><b>Pearson r</b> = ${fmt(r)}<br><b>p</b> = ${fmt(p)}</div>`;
-}
-function runROC(){
- let xh=$('rocX').value,gh=$('rocG').value,gs=groups(gh);if(gs.length!==2){$('rocResult').innerHTML='<div class=error>Condition must contain exactly two groups.</div>';return}
- let data=rows.map(r=>({x:Number(r[xh]),y:String(r[gh]).trim()})).filter(o=>Number.isFinite(o.x)&&gs.includes(o.y));
- let pos=gs[1],neg=gs[0],thresholds=[...new Set(data.map(o=>o.x))].sort((a,b)=>b-a),pts=[[0,0]];
- thresholds.forEach(th=>{let tp=data.filter(o=>o.y===pos&&o.x>=th).length,fn=data.filter(o=>o.y===pos&&o.x<th).length,fp=data.filter(o=>o.y===neg&&o.x>=th).length,tn=data.filter(o=>o.y===neg&&o.x<th).length;pts.push([fp/(fp+tn||1),tp/(tp+fn||1)])});
- pts.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);let auc=0;for(let i=1;i<pts.length;i++)auc+=(pts[i][0]-pts[i-1][0])*(pts[i][1]+pts[i-1][1])/2;
- $('rocResult').innerHTML=`<div class=result>Negative group: <b>${esc(neg)}</b><br>Positive group: <b>${esc(pos)}</b><br><b>AUC = ${fmt(auc)}</b><br><span class=muted>Prototype ROC calculation; validate results before clinical/research submission.</span></div>`;
- if(rocChart)rocChart.destroy();$('rocPlot').classList.remove('hidden');
- rocChart=new Chart($('rocPlot'),{type:'line',data:{labels:pts.map(p=>p[0].toFixed(2)),datasets:[{label:'ROC',data:pts.map(p=>({x:p[0],y:p[1]})),showLine:true,fill:false},{label:'Chance',data:[{x:0,y:0},{x:1,y:1}],showLine:true,fill:false}]},options:{parsing:false,scales:{x:{type:'linear',min:0,max:1,title:{display:true,text:'False Positive Rate'}},y:{min:0,max:1,title:{display:true,text:'True Positive Rate'}}}}});
-}
-function downloadCSV(){
- let csv='Variable,N,Missing,Mean,SD,Median,Min,Max\n'+lastDesc.map(x=>Object.values(x).join(',')).join('\n');
- let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='researchlab_descriptive_statistics.csv';a.click();
-}
+function render(){$('msg').innerHTML='<span class=success>Dataset loaded successfully.</span>';$('stats').innerHTML=`<div class=stat>Rows<b>${rows.length}</b></div><div class=stat>Columns<b>${headers.length}</b></div><div class=stat>Numeric variables<b>${numeric.length}</b></div><div class=stat>Missing cells<b>${rows.reduce((s,r)=>s+headers.filter(h=>String(r[h]??'').trim()==='').length,0)}</b></div>`;lastDesc=numeric.map(h=>{let a=num(h);return{Variable:h,N:a.length,Missing:rows.length-a.length,Mean:mean(a),SD:sd(a),Median:median(a),Min:Math.min(...a),Max:Math.max(...a)}});$('desc').innerHTML=lastDesc.map(x=>`<tr>${Object.values(x).map(v=>`<td>${typeof v==='number'?fmt(v):esc(v)}</td>`).join('')}</tr>`).join('');['plotVar','ttY','corX','corY','rocX'].forEach(id=>fill(id,numeric));['ttG','rocG'].forEach(id=>fill(id,categorical));drawPlot()}
+function drawPlot(){let h=$('plotVar').value,a=num(h),type=$('plotType').value;if(plotChart)plotChart.destroy();let labels=[],data=[];if(type==='hist'){let min=Math.min(...a),max=Math.max(...a),bins=Math.min(15,Math.max(6,Math.ceil(Math.sqrt(a.length)))),w=(max-min||1)/bins,c=Array(bins).fill(0);a.forEach(x=>c[Math.min(bins-1,Math.floor((x-min)/w))]++);labels=c.map((_,i)=>(min+i*w).toFixed(2));data=c}else{labels=['Min','Q1','Median','Q3','Max'];let s=[...a].sort((x,y)=>x-y);let q=p=>{let i=(s.length-1)*p,l=Math.floor(i),u=Math.ceil(i);return l===u?s[l]:s[l]+(s[u]-s[l])*(i-l)};data=[s[0],q(.25),q(.5),q(.75),s.at(-1)]}plotChart=new Chart($('plot'),{type:'bar',data:{labels,datasets:[{label:h,data}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}})}
+function runTTest(){let y=$('ttY').value,g=$('ttG').value,gs=groups(g);if(gs.length!==2){$('ttResult').innerHTML='<div class=error>Grouping variable must contain exactly two groups.</div>';return}let a=rows.filter(r=>String(r[g]).trim()===gs[0]).map(r=>Number(r[y])).filter(Number.isFinite),b=rows.filter(r=>String(r[g]).trim()===gs[1]).map(r=>Number(r[y])).filter(Number.isFinite),se=Math.sqrt(sd(a)**2/a.length+sd(b)**2/b.length),t=(mean(a)-mean(b))/se,df=(sd(a)**2/a.length+sd(b)**2/b.length)**2/((sd(a)**2/a.length)**2/(a.length-1)+(sd(b)**2/b.length)**2/(b.length-1)),p=2*(1-jStat.studentt.cdf(Math.abs(t),df));$('ttResult').innerHTML=`<div class=result><b>${esc(gs[0])}</b>: n=${a.length}, mean=${fmt(mean(a))}, SD=${fmt(sd(a))}<br><b>${esc(gs[1])}</b>: n=${b.length}, mean=${fmt(mean(b))}, SD=${fmt(sd(b))}<br><b>t</b> = ${fmt(t)}, <b>df</b> = ${fmt(df)}, <b>p</b> = ${fmt(p)}</div>`}
+function runCorrelation(){let xh=$('corX').value,yh=$('corY').value,pairs=[];rows.forEach(r=>{let a=Number(r[xh]),b=Number(r[yh]);if(Number.isFinite(a)&&Number.isFinite(b))pairs.push([a,b])});let x=pairs.map(p=>p[0]),y=pairs.map(p=>p[1]),mx=mean(x),my=mean(y),r=pairs.reduce((s,p)=>s+(p[0]-mx)*(p[1]-my),0)/Math.sqrt(pairs.reduce((s,p)=>s+(p[0]-mx)**2,0)*pairs.reduce((s,p)=>s+(p[1]-my)**2,0)),t=r*Math.sqrt((pairs.length-2)/(1-r*r)),p=2*(1-jStat.studentt.cdf(Math.abs(t),pairs.length-2));$('corResult').innerHTML=`<div class=result>n = ${pairs.length}<br><b>Pearson r</b> = ${fmt(r)}<br><b>p</b> = ${fmt(p)}</div>`}
+function runROC(){let xh=$('rocX').value,gh=$('rocG').value,gs=groups(gh);if(gs.length!==2){$('rocResult').innerHTML='<div class=error>Condition must contain exactly two groups.</div>';return}let d=rows.map(r=>({x:Number(r[xh]),y:String(r[gh]).trim()})).filter(o=>Number.isFinite(o.x)&&gs.includes(o.y)),pos=gs[1],neg=gs[0],ths=[...new Set(d.map(o=>o.x))].sort((a,b)=>b-a),pts=[[0,0]];ths.forEach(th=>{let tp=d.filter(o=>o.y===pos&&o.x>=th).length,fn=d.filter(o=>o.y===pos&&o.x<th).length,fp=d.filter(o=>o.y===neg&&o.x>=th).length,tn=d.filter(o=>o.y===neg&&o.x<th).length;pts.push([fp/(fp+tn||1),tp/(tp+fn||1)])});pts.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);let auc=0;for(let i=1;i<pts.length;i++)auc+=(pts[i][0]-pts[i-1][0])*(pts[i][1]+pts[i-1][1])/2;$('rocResult').innerHTML=`<div class=result>Negative: <b>${esc(neg)}</b><br>Positive: <b>${esc(pos)}</b><br><b>AUC = ${fmt(auc)}</b><br><span class=muted>Prototype calculation; independently validate before publication.</span></div>`;if(rocChart)rocChart.destroy();$('rocPlot').classList.remove('hidden');rocChart=new Chart($('rocPlot'),{type:'line',data:{datasets:[{label:'ROC',data:pts.map(p=>({x:p[0],y:p[1]})),showLine:true,fill:false},{label:'Chance',data:[{x:0,y:0},{x:1,y:1}],showLine:true,fill:false}]},options:{parsing:false,scales:{x:{type:'linear',min:0,max:1,title:{display:true,text:'False Positive Rate'}},y:{min:0,max:1,title:{display:true,text:'True Positive Rate'}}}}})}
+function downloadCSV(){let csv='Variable,N,Missing,Mean,SD,Median,Min,Max\n'+lastDesc.map(x=>Object.values(x).join(',')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='researchlab_descriptive_statistics.csv';a.click()}
 function downloadPlot(){let a=document.createElement('a');a.href=$('plot').toDataURL('image/png');a.download='researchlab_plot.png';a.click()}
 $('plotVar').addEventListener('change',drawPlot);$('plotType').addEventListener('change',drawPlot);
 </script>
-</body></html>
+</body>
+</html>
